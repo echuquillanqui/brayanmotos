@@ -48,6 +48,7 @@
             <li><a href="/ordenes" class="<?php echo (strpos($_SERVER['REQUEST_URI'], '/ordenes') !== false) ? 'active' : ''; ?>"><i class="fa-solid fa-clipboard-list me-2"></i> Órdenes</a></li>
             <li><a href="/clientes" class="<?php echo (strpos($_SERVER['REQUEST_URI'], '/clientes') !== false) ? 'active' : ''; ?>"><i class="fa-solid fa-users me-2"></i> Clientes</a></li>
             <li><a href="/productos" class="<?php echo (strpos($_SERVER['REQUEST_URI'], '/productos') !== false) ? 'active' : ''; ?>"><i class="fa-solid fa-box-open me-2"></i> Inventario</a></li>
+            <li><a href="/categorias" class="<?php echo (strpos($_SERVER['REQUEST_URI'], '/categorias') !== false) ? 'active' : ''; ?>"><i class="fa-solid fa-tags me-2"></i> Categorías</a></li>
             <li><a href="/ventas" class="<?php echo (strpos($_SERVER['REQUEST_URI'], '/ventas') !== false) ? 'active' : ''; ?>"><i class="fa-solid fa-cart-shopping me-2"></i> Ventas</a></li>
             
             <?php if(isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>

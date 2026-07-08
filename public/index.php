@@ -19,6 +19,7 @@ use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
 use App\Controllers\ClienteController;
 use App\Controllers\ProductoController;
+use App\Controllers\CategoriaController;
 use App\Controllers\OrdenController;
 use App\Controllers\VentaController;
 use App\Controllers\GastoController;
@@ -50,6 +51,13 @@ $router->get('/clientes/perfil', [ClienteController::class, 'perfil']);
 $router->post('/clientes/guardar', [ClienteController::class, 'store']);
 $router->post('/clientes/actualizar', [ClienteController::class, 'update']);
 $router->post('/clientes/cambiar-estado', [ClienteController::class, 'cambiarEstado']);
+
+// Categorías
+$router->get('/categorias', [CategoriaController::class, 'index']);
+$router->post('/categorias/guardar', [CategoriaController::class, 'store']);
+$router->post('/categorias/actualizar', [CategoriaController::class, 'update']);
+$router->post('/categorias/cambiar-estado', [CategoriaController::class, 'cambiarEstado']);
+$router->post('/categorias/eliminar', [CategoriaController::class, 'eliminar']);
 
 // Productos
 $router->get('/productos', [ProductoController::class, 'index']);

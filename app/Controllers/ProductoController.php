@@ -2,15 +2,19 @@
 namespace App\Controllers;
 
 use App\Models\Producto;
+use App\Models\Categoria;
 
 class ProductoController extends BaseController {
 
     public function index() {
         $prodModel = new Producto();
         $productos = $prodModel->getAll();
+        $categoriaModel = new Categoria();
+        $categorias = $categoriaModel->getActivas();
 
         $this->view('productos/index', [
             'productos' => $productos,
+            'categorias' => $categorias,
             'titulo' => 'Inventario'
         ]);
     }
@@ -81,7 +85,7 @@ class ProductoController extends BaseController {
             $data = [
                 'codigo' => $_POST['codigo'],
                 'nombre' => $_POST['nombre'],
-                'categoria' => $_POST['categoria'],
+                'categoria_id' => $_POST['categoria_id'] ?? null,
                 'stock' => $_POST['stock'],
                 'precio_compra' => $_POST['precio_compra'],
                 'precio_venta' => $_POST['precio_venta'],
@@ -113,7 +117,7 @@ class ProductoController extends BaseController {
                 'id' => $_POST['id'],
                 'codigo' => $_POST['codigo'],
                 'nombre' => $_POST['nombre'],
-                'categoria' => $_POST['categoria'],
+                'categoria_id' => $_POST['categoria_id'] ?? null,
                 'precio_compra' => $_POST['precio_compra'],
                 'precio_venta' => $_POST['precio_venta'],
                 'imagen' => $imagen
