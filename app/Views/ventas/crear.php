@@ -144,6 +144,24 @@
         renderizarTabla();
     }
 
+    function actualizarCantidad(index, cantidad) {
+        const producto = carrito[index];
+        let nuevaCantidad = parseInt(cantidad, 10);
+
+        if (isNaN(nuevaCantidad) || nuevaCantidad < 1) {
+            nuevaCantidad = 1;
+        }
+
+        if (nuevaCantidad > producto.stock) {
+            nuevaCantidad = producto.stock;
+            alert("No hay más stock disponible.");
+        }
+
+        producto.cantidad = nuevaCantidad;
+        producto.subtotal = producto.cantidad * producto.precio;
+        renderizarTabla();
+    }
+
     function renderizarTabla() {
         const tbody = document.getElementById('tablaProductos');
         const displayTotal = document.getElementById('displayTotal');
@@ -172,7 +190,14 @@
                 <td>${prod.nombre}</td>
                 <td class="text-center">S/ ${prod.precio.toFixed(2)}</td>
                 <td class="text-center">
-                    <span class="badge bg-light text-dark border px-3">${prod.cantidad}</span>
+                    <input type="number"
+                           class="form-control form-control-sm text-center mx-auto"
+                           style="max-width: 80px;"
+                           min="1"
+                           max="${prod.stock}"
+                           value="${prod.cantidad}"
+                           onchange="actualizarCantidad(${index}, this.value)"
+                           onkeyup="actualizarCantidad(${index}, this.value)">
                 </td>
                 <td class="text-end fw-bold">S/ ${prod.subtotal.toFixed(2)}</td>
                 <td class="text-end">
