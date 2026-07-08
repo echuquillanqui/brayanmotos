@@ -8,7 +8,7 @@ class Producto extends BaseModel {
     // Listar todos
     public function getAll() {
         try {
-            $stmt = $this->db->prepare("SELECT * FROM productos ORDER BY id DESC");
+            $stmt = $this->db->prepare("SELECT p.*, c.nombre AS categoria_nombre FROM productos p LEFT JOIN categorias c ON p.categoria_id = c.id ORDER BY p.id DESC");
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (\Exception $e) {
@@ -19,7 +19,7 @@ class Producto extends BaseModel {
     // Obtener uno
     public function getById($id) {
         try {
-            $stmt = $this->db->prepare("SELECT * FROM productos WHERE id = :id LIMIT 1");
+            $stmt = $this->db->prepare("SELECT p.*, c.nombre AS categoria_nombre FROM productos p LEFT JOIN categorias c ON p.categoria_id = c.id WHERE p.id = :id LIMIT 1");
             $stmt->execute([':id' => $id]);
             return $stmt->fetch(PDO::FETCH_OBJ);
         } catch (\Exception $e) {
@@ -46,14 +46,14 @@ class Producto extends BaseModel {
     // Crear producto
     public function create($data) {
         try {
-            $sql = "INSERT INTO productos (codigo, nombre, categoria, stock, precio_compra, precio_venta, imagen, estado) 
+            $sql = "INSERT INTO productos (codigo, nombre, categoria_id, stock, precio_compra, precio_venta, imagen, estado) 
                     VALUES (:codigo, :nombre, :cat, :stock, :p_compra, :p_venta, :img, 1)";
             
             $stmt = $this->db->prepare($sql);
             return $stmt->execute([
                 ':codigo' => $data['codigo'],
                 ':nombre' => $data['nombre'],
-                ':cat' => $data['categoria'],
+                ':cat' => $data['categoria_id'] ?: null,
                 ':stock' => $data['stock'],
                 ':p_compra' => $data['precio_compra'],
                 ':p_venta' => $data['precio_venta'],
@@ -67,7 +67,7 @@ class Producto extends BaseModel {
     // Actualizar datos básicos
     public function update($data) {
         try {
-            $sql = "UPDATE productos SET codigo=:codigo, nombre=:nombre, categoria=:cat, precio_compra=:p_compra, precio_venta=:p_venta";
+            $sql = "UPDATE productos SET codigo=:codigo, nombre=:nombre, categoria_id=:cat, precio_compra=:p_compra, precio_venta=:p_venta";
             
             if ($data['imagen']) {
                 $sql .= ", imagen=:img";
@@ -78,7 +78,7 @@ class Producto extends BaseModel {
             
             $params = [
                 ':codigo' => $data['codigo'], ':nombre' => $data['nombre'], 
-                ':cat' => $data['categoria'], ':p_compra' => $data['precio_compra'], 
+                ':cat' => $data['categoria_id'] ?: null, ':p_compra' => $data['precio_compra'], 
                 ':p_venta' => $data['precio_venta'], ':id' => $data['id']
             ];
             

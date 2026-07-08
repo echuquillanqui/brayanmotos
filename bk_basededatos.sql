@@ -56,6 +56,25 @@ DELETE FROM `configuracion`;
 INSERT INTO `configuracion` (`id`, `nombre_sistema`, `moneda`, `simbolo_moneda`, `impuesto`, `telefono`, `email`, `direccion`, `updated_at`, `logo`, `terminos_orden`, `mensaje_ticket`) VALUES
 	(1, 'Taller Pro', 'PEN', 'S/', 18.00, '', '', '', '2025-12-26 20:03:42', 'logo_1766779180.png', NULL, '¡Gracias por su preferencia!');
 
+
+-- Volcando estructura para tabla taller_db.categorias
+CREATE TABLE IF NOT EXISTS `categorias` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descripcion` text COLLATE utf8mb4_unicode_ci,
+  `estado` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla taller_db.categorias: ~3 rows (aproximadamente)
+DELETE FROM `categorias`;
+INSERT INTO `categorias` (`id`, `nombre`, `descripcion`, `estado`, `created_at`) VALUES
+	(1, 'Repuesto', 'Partes y piezas para reparaciones.', 1, CURRENT_TIMESTAMP),
+	(2, 'Accesorio', 'Accesorios complementarios para venta o servicio.', 1, CURRENT_TIMESTAMP),
+	(3, 'Equipo', 'Equipos completos o componentes mayores.', 1, CURRENT_TIMESTAMP);
+
 -- Volcando estructura para tabla taller_db.detalle_ventas
 CREATE TABLE IF NOT EXISTS `detalle_ventas` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -184,12 +203,14 @@ CREATE TABLE IF NOT EXISTS `productos` (
   `precio_compra` decimal(10,2) DEFAULT NULL,
   `precio_venta` decimal(10,2) DEFAULT NULL,
   `stock` int DEFAULT '0',
-  `categoria` enum('repuesto','accesorio','equipo') COLLATE utf8mb4_unicode_ci DEFAULT 'repuesto',
+  `categoria_id` int DEFAULT '1',
   `imagen` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `estado` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `codigo` (`codigo`)
+  UNIQUE KEY `codigo` (`codigo`),
+  KEY `categoria_id` (`categoria_id`),
+  CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla taller_db.productos: ~1 rows (aproximadamente)

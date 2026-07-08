@@ -55,7 +55,7 @@
                                         <span class="badge bg-danger ms-1" style="font-size: 0.6em;">Bajo</span>
                                     <?php endif; ?>
                                 </td>
-                                <td><span class="badge bg-info text-dark"><?php echo ucfirst($prod->categoria); ?></span></td>
+                                <td><span class="badge bg-info text-dark"><?php echo htmlspecialchars($prod->categoria_nombre ?? 'Sin categoría'); ?></span></td>
                                 <td class="fw-bold fs-5 <?php echo $prod->stock > 0 ? 'text-success' : 'text-danger'; ?>">
                                     <?php echo $prod->stock; ?>
                                 </td>
@@ -121,11 +121,13 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label class="form-label">Categoría</label>
-                                    <select class="form-select" name="categoria" id="categoria">
-                                        <option value="repuesto">Repuesto</option>
-                                        <option value="accesorio">Accesorio</option>
-                                        <option value="equipo">Equipo</option>
+                                    <select class="form-select" name="categoria_id" id="categoria_id" required>
+                                        <option value="">Seleccione una categoría</option>
+                                        <?php foreach($categorias as $cat): ?>
+                                            <option value="<?php echo $cat->id; ?>"><?php echo htmlspecialchars($cat->nombre); ?></option>
+                                        <?php endforeach; ?>
                                     </select>
+                                    <div class="form-text">Administre las opciones desde el menú Categorías.</div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Stock Inicial</label>
@@ -226,7 +228,7 @@
         document.getElementById('prodId').value = prod.id;
         document.getElementById('codigo').value = prod.codigo;
         document.getElementById('nombre').value = prod.nombre;
-        document.getElementById('categoria').value = prod.categoria;
+        document.getElementById('categoria_id').value = prod.categoria_id || '';
         document.getElementById('stock').value = prod.stock;
         document.getElementById('stock').readOnly = true; // No editar stock aquí, usar ajuste
         document.getElementById('precio_compra').value = prod.precio_compra;
