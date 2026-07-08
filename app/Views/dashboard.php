@@ -74,7 +74,7 @@
 </div>
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-lg-7">
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-white py-3">
                 <h6 class="m-0 font-weight-bold text-primary"><i class="fa-solid fa-clock-rotate-left me-2"></i> Últimas 5 Órdenes Recibidas</h6>
@@ -123,6 +123,41 @@
                 <div class="text-center mt-2">
                     <a href="/ordenes" class="text-decoration-none small">Ver todas las órdenes &rarr;</a>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary"><i class="fa-solid fa-ranking-star me-2"></i> Productos más Vendidos</h6>
+                <span class="badge bg-primary">Top 5</span>
+            </div>
+            <div class="card-body">
+                <?php if(empty($productosTop)): ?>
+                    <div class="text-center text-muted py-4">
+                        <i class="fa-solid fa-box-open fa-2x mb-3 opacity-50"></i>
+                        <p class="mb-0">Aún no hay productos vendidos.</p>
+                    </div>
+                <?php else: ?>
+                    <div class="list-group list-group-flush">
+                        <?php foreach($productosTop as $index => $producto): ?>
+                            <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <span class="badge rounded-pill bg-light text-dark border me-3"><?php echo $index + 1; ?></span>
+                                    <div>
+                                        <div class="fw-semibold"><?php echo htmlspecialchars($producto->nombre); ?></div>
+                                        <small class="text-muted">Unidades vendidas</small>
+                                    </div>
+                                </div>
+                                <span class="badge bg-success rounded-pill fs-6"><?php echo (int) $producto->total_vendido; ?></span>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="/ventas" class="text-decoration-none small">Ver historial de ventas &rarr;</a>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

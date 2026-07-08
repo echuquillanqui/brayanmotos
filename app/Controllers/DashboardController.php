@@ -36,13 +36,17 @@ class DashboardController extends BaseController {
         $stmt = $db->query($sqlRecientes);
         $recientes = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-        // 4. Enviar todo a la vista
+        // 4. Obtener los 5 productos más vendidos
+        $productosTop = $reporteModel->getProductosTop();
+
+        // 5. Enviar todo a la vista
         $this->view('dashboard', [
             'titulo' => 'Panel de Control',
             'ingresos' => $totalIngresos,
             'pendientes' => $pendientes,
             'listos' => $listos,
-            'recientes' => $recientes
+            'recientes' => $recientes,
+            'productosTop' => $productosTop
         ]);
     }
 }
