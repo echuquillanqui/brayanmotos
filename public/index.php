@@ -27,6 +27,7 @@ use App\Controllers\ReporteController;
 use App\Controllers\UsuarioController;
 use App\Controllers\ConfiguracionController;
 use App\Controllers\RastreoController;
+use App\Controllers\CotizadorController;
 
 $router = new Router();
 
@@ -79,6 +80,10 @@ $router->post('/ordenes/agregar-repuesto', [OrdenController::class, 'agregarRepu
 $router->post('/ordenes/eliminar-repuesto', [OrdenController::class, 'eliminarRepuesto']);
 $router->post('/ordenes/mano-obra', [OrdenController::class, 'actualizarManoObra']);
 $router->post('/ordenes/diagnostico', [OrdenController::class, 'guardarDiagnostico']);
+
+// Cotizador
+$router->get('/cotizador', [CotizadorController::class, 'index']);
+$router->post('/cotizador/imprimir', [CotizadorController::class, 'imprimir']);
 
 // Ventas
 $router->get('/ventas', [VentaController::class, 'index']);
