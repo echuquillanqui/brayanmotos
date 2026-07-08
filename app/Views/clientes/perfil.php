@@ -62,6 +62,11 @@
                 </button>
             </li>
             <li class="nav-item">
+                <button class="nav-link" id="cotizaciones-tab" data-bs-toggle="tab" data-bs-target="#cotizaciones" type="button">
+                    <i class="fa-solid fa-file-invoice-dollar me-2"></i> Cotizaciones
+                </button>
+            </li>
+            <li class="nav-item">
                 <button class="nav-link" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button">
                     <i class="fa-solid fa-user-gear me-2"></i> Datos Personales
                 </button>
@@ -144,6 +149,55 @@
                                         <td class="text-end">
                                             <a href="/ventas/imprimir?id=<?php echo $v->id; ?>" target="_blank" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-file-pdf"></i> PDF</a>
                                         </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+
+            <div class="tab-pane fade" id="cotizaciones">
+                <?php if(empty($cotizaciones)): ?>
+                    <div class="text-center py-5 text-muted">
+                        <i class="fa-solid fa-file-invoice-dollar fa-3x mb-3 opacity-25"></i>
+                        <p>Este cliente aún no tiene cotizaciones guardadas.</p>
+                    </div>
+                <?php else: ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Fecha</th>
+                                    <th>Validez</th>
+                                    <th>Productos cotizados</th>
+                                    <th>Observaciones</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($cotizaciones as $cot): ?>
+                                    <tr>
+                                        <td><strong>COT-<?php echo str_pad($cot->id, 6, '0', STR_PAD_LEFT); ?></strong></td>
+                                        <td><?php echo date('d/m/Y H:i', strtotime($cot->fecha)); ?></td>
+                                        <td><?php echo (int) $cot->validez; ?> día(s)</td>
+                                        <td>
+                                            <?php $productosCotizados = json_decode($cot->productos_json ?? '[]', true); ?>
+                                            <?php if(empty($productosCotizados)): ?>
+                                                <span class="text-muted">Sin detalle</span>
+                                            <?php else: ?>
+                                                <?php foreach($productosCotizados as $productoCotizado): ?>
+                                                    <div>
+                                                        <?php echo (int) ($productoCotizado['cantidad'] ?? 0); ?> x
+                                                        <?php echo htmlspecialchars($productoCotizado['nombre'] ?? 'Producto', ENT_QUOTES, 'UTF-8'); ?>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?php echo htmlspecialchars($cot->observaciones ?: 'Sin observaciones', ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td class="text-end fw-bold text-primary"><?php echo $sistema->simbolo_moneda . number_format($cot->total, 2); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>

@@ -47,6 +47,7 @@ $vence = date('d/m/Y', strtotime($cotizacion['fecha'] . ' +' . (int) $cotizacion
         </div>
         <div class="doc-info">
             <h1>COTIZACIÓN</h1>
+            <?php if(!empty($cotizacion['id'])): ?><div>N°: COT-<?php echo str_pad($cotizacion['id'], 6, '0', STR_PAD_LEFT); ?></div><?php endif; ?>
             <div>Fecha: <?php echo $fecha; ?></div>
             <div>Válida hasta: <?php echo $vence; ?></div>
         </div>
@@ -96,6 +97,7 @@ $vence = date('d/m/Y', strtotime($cotizacion['fecha'] . ' +' . (int) $cotizacion
 
     <div class="footer">
         Esta cotización es informativa y no descuenta inventario. Los precios y disponibilidad pueden variar al confirmar la venta.
+        <?php if(!empty($cotizacion['guardada'])): ?>Copia guardada en el sistema para verificación interna.<?php endif; ?>
     </div>
 </body>
 </html>

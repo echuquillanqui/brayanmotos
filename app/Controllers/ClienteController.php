@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Cotizacion;
 
 class ClienteController extends BaseController {
 
@@ -29,12 +30,15 @@ class ClienteController extends BaseController {
         $ordenes = $clienteModel->getOrdenes($id);
         $ventas = $clienteModel->getVentas($id);
         $stats = $clienteModel->getEstadisticas($id);
+        $cotizacionModel = new Cotizacion();
+        $cotizaciones = $cotizacionModel->getByCliente($id);
 
         $this->view('clientes/perfil', [
             'titulo' => 'Perfil: ' . $cliente->nombre,
             'cliente' => $cliente,
             'ordenes' => $ordenes,
             'ventas' => $ventas,
+            'cotizaciones' => $cotizaciones,
             'stats' => $stats
         ]);
     }

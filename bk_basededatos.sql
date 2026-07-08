@@ -75,6 +75,25 @@ INSERT INTO `categorias` (`id`, `nombre`, `descripcion`, `estado`, `created_at`)
 	(2, 'Accesorio', 'Accesorios complementarios para venta o servicio.', 1, CURRENT_TIMESTAMP),
 	(3, 'Equipo', 'Equipos completos o componentes mayores.', 1, CURRENT_TIMESTAMP);
 
+-- Volcando estructura para tabla taller_db.cotizaciones
+CREATE TABLE IF NOT EXISTS `cotizaciones` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cliente_id` int DEFAULT NULL,
+  `cliente_nombre` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `telefono` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `productos_json` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `validez` int NOT NULL DEFAULT '7',
+  `observaciones` text COLLATE utf8mb4_unicode_ci,
+  `fecha` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `cliente_id` (`cliente_id`),
+  CONSTRAINT `cotizaciones_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla taller_db.cotizaciones: ~0 rows (aproximadamente)
+DELETE FROM `cotizaciones`;
+
 -- Volcando estructura para tabla taller_db.detalle_ventas
 CREATE TABLE IF NOT EXISTS `detalle_ventas` (
   `id` int NOT NULL AUTO_INCREMENT,
