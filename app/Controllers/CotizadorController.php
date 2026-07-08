@@ -2,6 +2,8 @@
 namespace App\Controllers;
 
 use App\Models\Producto;
+use App\Models\Cliente;
+use App\Models\Cotizacion;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -9,10 +11,13 @@ class CotizadorController extends BaseController {
 
     public function index() {
         $prodModel = new Producto();
+        $clienteModel = new Cliente();
         $productos = $prodModel->getAll();
+        $clientes = $clienteModel->getAll();
 
         $this->view('cotizador/index', [
             'productos' => $productos,
+            'clientes' => $clientes,
             'titulo' => 'Cotizador'
         ]);
     }
@@ -29,14 +34,41 @@ class CotizadorController extends BaseController {
             exit;
         }
 
+        $clienteId = (int) ($_POST['cliente_id'] ?? 0);
+        $clienteNombre = trim($_POST['cliente'] ?? '');
+        $telefono = trim($_POST['telefono'] ?? '');
+
+        if ($clienteId > 0) {
+            $clienteModel = new Cliente();
+            $clienteRegistrado = $clienteModel->getById($clienteId);
+            if ($clienteRegistrado) {
+                $clienteNombre = $clienteRegistrado->nombre;
+                $telefono = $clienteRegistrado->telefono ?: $telefono;
+            }
+        }
+
         $cotizacion = [
-            'cliente' => trim($_POST['cliente'] ?? ''),
-            'telefono' => trim($_POST['telefono'] ?? ''),
+            'cliente_id' => $clienteId ?: null,
+            'cliente' => $clienteNombre,
+            'telefono' => $telefono,
             'observaciones' => trim($_POST['observaciones'] ?? ''),
             'validez' => trim($_POST['validez'] ?? '7'),
             'fecha' => date('Y-m-d H:i:s'),
             'total' => (float) ($_POST['total_cotizacion'] ?? 0),
         ];
+
+        $cotizacionModel = new Cotizacion();
+        $cotizacion['id'] = $cotizacionModel->create([
+            'cliente_id' => $cotizacion['cliente_id'],
+            'cliente_nombre' => $cotizacion['cliente'],
+            'telefono' => $cotizacion['telefono'],
+            'productos_json' => json_encode($items, JSON_UNESCAPED_UNICODE),
+            'total' => $cotizacion['total'],
+            'validez' => (int) $cotizacion['validez'],
+            'observaciones' => $cotizacion['observaciones'],
+            'fecha' => $cotizacion['fecha']
+        ]);
+        $cotizacion['guardada'] = $cotizacion['id'] > 0;
 
         $sistema = $this->config;
 

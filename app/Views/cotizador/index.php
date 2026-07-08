@@ -3,7 +3,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
         <h1 class="h2 mb-1"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Cotizador</h1>
-        <p class="text-muted mb-0">Busca productos del inventario, arma la cotización e imprime el PDF.</p>
+        <p class="text-muted mb-0">Busca productos del inventario, arma la cotización, vincula clientes habituales y guarda una copia para verificación.</p>
     </div>
 </div>
 
@@ -84,12 +84,29 @@
                     <input type="hidden" name="total_cotizacion" id="inputTotal" value="0">
 
                     <div class="mb-3">
+                        <label class="form-label fw-bold">Cliente habitual registrado</label>
+                        <select name="cliente_id" id="selectCliente" class="form-select select2" onchange="seleccionarCliente()">
+                            <option value="">Buscar cliente registrado...</option>
+                            <?php foreach(($clientes ?? []) as $cliente): ?>
+                                <?php if((int) $cliente->estado === 1): ?>
+                                    <option value="<?php echo (int) $cliente->id; ?>"
+                                            data-nombre="<?php echo htmlspecialchars($cliente->nombre ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-telefono="<?php echo htmlspecialchars($cliente->telefono ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                                        <?php echo htmlspecialchars($cliente->nombre, ENT_QUOTES, 'UTF-8'); ?>
+                                        <?php if(!empty($cliente->telefono)): ?> | <?php echo htmlspecialchars($cliente->telefono, ENT_QUOTES, 'UTF-8'); ?><?php endif; ?>
+                                    </option>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </select>
+                        <div class="form-text">Si es cliente habitual, selecciónalo para que la cotización quede guardada en su perfil.</div>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label fw-bold">Cliente / Empresa</label>
-                        <input type="text" name="cliente" class="form-control" placeholder="Público general">
+                        <input type="text" name="cliente" id="inputCliente" class="form-control" placeholder="Público general">
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-bold">Teléfono</label>
-                        <input type="text" name="telefono" class="form-control" placeholder="Opcional">
+                        <input type="text" name="telefono" id="inputTelefono" class="form-control" placeholder="Opcional">
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-bold">Validez (días)</label>
@@ -116,6 +133,13 @@
 <script>
     let cotizacion = [];
     const simboloMoneda = <?php echo json_encode($sistema->simbolo_moneda); ?>;
+
+    function seleccionarCliente() {
+        const option = $('#selectCliente').find(':selected');
+        if (!option.val()) return;
+        document.getElementById('inputCliente').value = option.data('nombre') || '';
+        document.getElementById('inputTelefono').value = option.data('telefono') || '';
+    }
 
     function agregarProducto() {
         const select = $('#selectProducto');
