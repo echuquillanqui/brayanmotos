@@ -24,6 +24,23 @@
 
 <div class="card shadow-sm">
     <div class="card-body">
+        <div class="row g-3 align-items-end mb-3">
+            <div class="col-md-4 col-lg-3">
+                <label for="filtroCategoria" class="form-label fw-semibold">Filtrar por categoría</label>
+                <select class="form-select" id="filtroCategoria">
+                    <option value="">Todas las categorías</option>
+                    <?php foreach($categorias as $cat): ?>
+                        <option value="<?php echo htmlspecialchars($cat->nombre); ?>"><?php echo htmlspecialchars($cat->nombre); ?></option>
+                    <?php endforeach; ?>
+                    <option value="Sin categoría">Sin categoría</option>
+                </select>
+            </div>
+            <div class="col-md-auto">
+                <button type="button" class="btn btn-outline-secondary" id="limpiarFiltroCategoria">
+                    <i class="fa-solid fa-filter-circle-xmark"></i> Limpiar filtro
+                </button>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-hover align-middle" id="datatable">
                 <thead class="table-dark">
@@ -263,4 +280,19 @@
         reader.onloadend = function () { preview.src = reader.result; }
         if (file) reader.readAsDataURL(file);
     }
+
+    $(document).ready(function () {
+        const tablaInventario = $('#datatable').DataTable();
+        const columnaCategoria = 3;
+
+        $('#filtroCategoria').on('change', function () {
+            const categoria = this.value;
+            const busqueda = categoria ? '^' + $.fn.dataTable.util.escapeRegex(categoria) + '$' : '';
+            tablaInventario.column(columnaCategoria).search(busqueda, true, false).draw();
+        });
+
+        $('#limpiarFiltroCategoria').on('click', function () {
+            $('#filtroCategoria').val('').trigger('change');
+        });
+    });
 </script>
