@@ -77,6 +77,24 @@ class VentaController extends BaseController {
         $dompdf->loadHtml($html);
         $dompdf->setPaper([0, 0, 226.77, 600], 'portrait'); 
         $dompdf->render();
-        $dompdf->stream("Ticket_Venta_$id.pdf", ["Attachment" => false]);
+        $dompdf->stream($this->generarNombreTicketVenta($venta), ["Attachment" => false]);
+    }
+
+    private function generarNombreTicketVenta($venta) {
+        $cliente = $venta->cliente_nombre ?? 'publico_general';
+        $fechaVenta = !empty($venta->fecha) ? strtotime($venta->fecha) : time();
+        $fecha = $fechaVenta ? date('m-d-Y', $fechaVenta) : date('m-d-Y');
+
+        return $this->limpiarNombreArchivo($cliente) . '_' . $fecha . '.pdf';
+    }
+
+    private function limpiarNombreArchivo($texto) {
+        $texto = trim((string) $texto);
+        $texto = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $texto) ?: $texto;
+        $texto = strtolower($texto ?: 'publico_general');
+        $texto = preg_replace('/[^a-z0-9]+/', '_', $texto);
+        $texto = trim($texto, '_');
+
+        return $texto ?: 'publico_general';
     }
 }
