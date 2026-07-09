@@ -102,16 +102,14 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <h6 class="border-bottom pb-2 mb-3 text-primary mt-4">2. Datos del Equipo</h6>
+                    <h6 class="border-bottom pb-2 mb-3 text-primary mt-4">2. Datos del Servicio</h6>
                     <div class="row mb-2">
                         <div class="col-md-4">
                             <label class="form-label">Tipo *</label>
                             <select class="form-select" name="equipo_tipo" required>
-                                <option value="Laptop">Laptop</option>
-                                <option value="PC Escritorio">PC Escritorio</option>
-                                <option value="Impresora">Impresora</option>
-                                <option value="Celular">Celular</option>
-                                <option value="Otro">Otro</option>
+                                <option value="Moto">Moto</option>
+                                <option value="Otros">Otros</option>
+                                <option value="Cuatrimoto">Cuatrimoto</option>
                             </select>
                         </div>
                         <div class="col-md-4">
@@ -124,7 +122,7 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Número de Serie / IMEI</label>
+                        <label class="form-label">Número de Serie</label>
                         <input type="text" class="form-control" name="equipo_serie">
                     </div>
                     <h6 class="border-bottom pb-2 mb-3 text-primary mt-4">3. Detalle del Servicio</h6>
